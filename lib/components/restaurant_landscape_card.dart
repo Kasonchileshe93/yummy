@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
+import 'package:yummy/screens/restaurant_page.dart';
 import '../model/restaurant.dart';
 import 'restaurant_landscape_card.dart';
 
@@ -70,17 +71,23 @@ class _RestaurantLandscapeCardState extends State<RestaurantLandscapeCard> {
           // TODO: Add ListTile
           ListTile(
             // 1
-            title: Text(widget.restaurant.name, style: textTheme.titleSmall),
-            // 2
+            title: Text(
+              widget.restaurant.name,
+              style: textTheme.titleSmall,
+            ),
             subtitle: Text(
               widget.restaurant.attributes,
               maxLines: 1,
               style: textTheme.bodySmall,
             ),
-            // 3
             onTap: () {
-              // ignore: avoid_print
-              print('Tap on ${widget.restaurant.name}');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => RestaurantPage(
+                          restaurant: widget.restaurant,
+                        )),
+              );
             },
           ),
         ],
