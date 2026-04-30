@@ -1,28 +1,32 @@
 // ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
-import 'package:yummy/components/category_card.dart';
-import 'package:yummy/model/food_category.dart';
-import 'theme/theme_button.dart';
+import 'package:yummy/components/theme_buttons.dart';
+
 import 'components/color_button.dart';
 import 'constants.dart';
-import 'components/post_card.dart';
-import 'model/post.dart';
-import 'components/restaurant_landscape_card.dart';
-import 'model/restaurant.dart';
+import 'model/cart_manager.dart';
+import 'model/order_manager.dart';
 import 'screens/explore_page.dart';
 
 class Home extends StatefulWidget {
   const Home({
     super.key,
+    required this.cartManager,
+    required this.ordersManager,
     required this.changeTheme,
     required this.changeColor,
     required this.colorSelected,
+    required this.appTitle,
   });
 
+  final CartManager cartManager;
+  final OrderManager ordersManager;
+  final ColorSelection colorSelected;
   final void Function(bool useLightMode) changeTheme;
   final void Function(int value) changeColor;
-  final ColorSelection colorSelected;
+  final String appTitle;
+
   @override
   State<Home> createState() => _HomeState();
 }
@@ -45,15 +49,16 @@ class _HomeState extends State<Home> {
       label: 'Account',
       selectedIcon: Icon(Icons.person),
     )
-      
   ];
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Define pages
     final pages = [
-      // 1
-      ExplorePage(),
+      ExplorePage(
+        cartManager: widget.cartManager,
+        orderManager: widget.ordersManager,
+      ),
+      // TODO: Replace with Order Page
       const Center(
         child: Text(
           'Order Page',
@@ -67,34 +72,30 @@ class _HomeState extends State<Home> {
         ),
       ),
     ];
-     
+
     return Scaffold(
       appBar: AppBar(
+        title: Text(widget.appTitle),
         elevation: 4.0,
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Theme.of(context).colorScheme.background,
         actions: [
-          ThemeButton(changeThemeMode: widget.changeTheme),
+          ThemeButton(
+            changeThemeMode: widget.changeTheme,
+          ),
           ColorButton(
             changeColor: widget.changeColor,
             colorSelected: widget.colorSelected,
           ),
         ],
       ),
-
-      // TODO: Switch between pages
       body: IndexedStack(index: tab, children: pages),
-      // TODO: Add bottom navigation bar
-      // 1
       bottomNavigationBar: NavigationBar(
-        // 2
         selectedIndex: tab,
-        // 3
         onDestinationSelected: (index) {
           setState(() {
             tab = index;
           });
         },
-        // 4
         destinations: appBarDestinations,
       ),
     );

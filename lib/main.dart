@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'constants.dart';
 import 'home.dart';
+import 'model/cart_manager.dart';
+import 'model/order_manager.dart';
 
 void main() {
   runApp(const Yummy());
@@ -17,11 +20,16 @@ class _YummyState extends State<Yummy> {
   ThemeMode themeMode = ThemeMode.light;
   ColorSelection colorSelected = ColorSelection.pink;
 
+  /// Manage user's shopping cart for the items they order.
+  final CartManager _cartManager = CartManager();
+
+  /// Manage user's orders submitted
+  final OrderManager _orderManager = OrderManager();
+
   void changeThemeMode(bool useLightMode) {
     setState(() {
       themeMode = useLightMode
-          ? ThemeMode
-                .light //
+          ? ThemeMode.light //
           : ThemeMode.dark;
     });
   }
@@ -50,9 +58,10 @@ class _YummyState extends State<Yummy> {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      // TODO: Replace Scaffold with Home widget
-      // 4
       home: Home(
+        appTitle: appTitle,
+        cartManager: _cartManager,
+        ordersManager: _orderManager,
         changeTheme: changeThemeMode,
         changeColor: changeColor,
         colorSelected: colorSelected,
